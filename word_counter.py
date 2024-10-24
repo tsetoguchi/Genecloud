@@ -12,7 +12,9 @@ def count_word_frequencies(directory):
             with open(file_path, 'r', encoding='utf-8') as file:
                 text = file.read().lower()  # Read and convert to lowercase
                 words = text.split()  # Split the text into words
-                word_counter.update(words)  # Update the counter with words
+
+                # Update counter with words, ignoring purely numeric words
+                word_counter.update(word for word in words if not word.isdigit())
 
     return word_counter
 
