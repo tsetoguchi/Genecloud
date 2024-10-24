@@ -4,8 +4,15 @@ import re
 import word_counter
 from selectolax.parser import HTMLParser
 
+
+# Read the API token from api_token.txt
+def read_api_token():
+    with open('api_token.txt', 'r') as file:
+        return file.read().strip()
+
+
 # Your Genius API token
-API_TOKEN = 'cCINJxH7gUqCAzLKmVOQc25zG1j1j5_AZRHk2SGgEwqbu9gxiuHuOW6HL4dobAqt'
+API_TOKEN = read_api_token()
 BASE_URL = 'https://api.genius.com'
 
 # Set up headers
