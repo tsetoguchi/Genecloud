@@ -51,10 +51,7 @@ def get_lyrics(song_url):
     # Find the lyrics part of the page
     lyrics_container = html.css_first('div[data-lyrics-container="true"]')
     if lyrics_container:
-        # Remove numbers from the lyrics using regex
-        lyrics = lyrics_container.text(strip=True)
-        cleaned_lyrics = re.sub(r'\d+', '', lyrics)
-        return cleaned_lyrics
+        return lyrics_container.text(strip=True)
     else:
         return "Lyrics not found."
 
