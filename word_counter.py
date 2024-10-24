@@ -27,7 +27,6 @@ def print_frequencies(word_counter):
 
 def word_count(directory):
     word_frequencies = count_word_frequencies(directory)
-    print(word_frequencies)
     return word_frequencies
 
 

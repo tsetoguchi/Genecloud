@@ -24,6 +24,11 @@ def __sanitize_text(text):
     return re.sub(r'[<>:"/\\|?*]', '', text)
 
 
+def __sanitize_lyrics(lyrics):
+    # Remove any characters that are invalid in filenames
+    return re.sub(r'[\[\]<>:"/\\|?*,]', '', lyrics)
+
+
 def __sanitize_response(response):
     if response.status_code != 200:
         print(f"Error: {response.status_code} - {response.text}")
@@ -67,8 +72,9 @@ def get_lyrics(song_url):
 
     # Find the lyrics of the page
     lyrics_container = html.css_first('div[data-lyrics-container="true"]')
+
     if lyrics_container:
-        return lyrics_container.text(strip=True)
+        return __sanitize_lyrics(lyrics_container.text(strip=True))
     else:
         return "Lyrics not found."
 
@@ -97,7 +103,7 @@ def main(artist_name, max_songs=10):
     song_titles, song_urls = search_artist_songs(artist_name, max_songs)
 
     # If there are no songs, the artist does not exist
-    if not song_titles or not song_urls :
+    if not song_titles or not song_urls:
         return
 
     # Create a path for the artist's name
@@ -121,7 +127,13 @@ def main(artist_name, max_songs=10):
 
 if __name__ == "__main__":
 
-    artists = ["hasjkdhasd"]
+    artists = ["Sabrina Carpenter", "Justin Bieber", "Future", "Gucci Mane", "Jay-Z",
+               "Ariana Grande", "Bladee", "Chief Keef", "6ix9ine", "Cocteau Twins",
+               "Drake", "Dua Lipa", "Eminem", "Kanye West", "Kendrick Lamar", "Lauv",
+               "Lil Yachty", "Mos Def", "Nas", "Sematary", "Skrillex", "Taylor Swift",
+               "The Cool Kids", "The Notorious B.I.G.", "The Weeknd", "Tupac", "Wu-Tang Clan"]
+
+    false_artists = ["hasjkdhasd"]
 
     for artist in artists:
         main(artist, max_songs=100)
