@@ -1,6 +1,6 @@
-import requests
 import os
 import re
+import requests
 import word_counter
 from selectolax.parser import HTMLParser
 
@@ -19,24 +19,34 @@ BASE_URL = 'https://api.genius.com'
 headers = {'Authorization': f'Bearer {API_TOKEN}'}
 
 
-def sanitize_filename(title):
+def __sanitize_text(text):
     # Remove any characters that are invalid in filenames
-    return re.sub(r'[<>:"/\\|?*]', '', title)
+    return re.sub(r'[<>:"/\\|?*]', '', text)
 
 
-def search_artist_songs(artist_name, max_songs=10):
-    search_url = f'{BASE_URL}/search?q={artist_name}'
-    response = requests.get(search_url, headers=headers)
-
+def __sanitize_response(response):
     if response.status_code != 200:
         print(f"Error: {response.status_code} - {response.text}")
         return [], []
 
     data = response.json()
 
+    if len(data['response']['hits']) == 0:
+        print("Error: Artist does not exist within the database.")
+        return []
+
     if 'response' not in data or 'hits' not in data['response']:
         print("Error: Unexpected API response structure.")
         return [], []
+
+
+def search_artist_songs(artist_name, max_songs=10):
+    search_url = f'{BASE_URL}/search?q={artist_name}'
+    response = requests.get(search_url, headers=headers)
+
+    __sanitize_response(response)
+
+    data = response.json()
 
     song_titles = []
     song_urls = []
@@ -55,7 +65,7 @@ def get_lyrics(song_url):
     page = requests.get(song_url)
     html = HTMLParser(page.text)
 
-    # Find the lyrics part of the page
+    # Find the lyrics of the page
     lyrics_container = html.css_first('div[data-lyrics-container="true"]')
     if lyrics_container:
         return lyrics_container.text(strip=True)
@@ -83,19 +93,23 @@ def save_word_count_to_file(word_count, artist_name):
             file.write(f"{word}: {count}\n")
 
 
-def main(artist_name, max_songs=100):
+def main(artist_name, max_songs=10):
+    song_titles, song_urls = search_artist_songs(artist_name, max_songs)
+
+    # If there are no songs, the artist does not exist
+    if not song_titles or not song_urls :
+        return
+
     # Create a path for the artist's name
     artist_directory = os.path.join('./', artist_name)
     if not os.path.exists(artist_directory):
         os.makedirs(artist_directory)
         print(f"Created directory: {artist_directory}")
 
-    song_titles, song_urls = search_artist_songs(artist_name, max_songs)
-
     for title, url in zip(song_titles, song_urls):
         print(f"Downloading lyrics for {title}...")
         lyrics = get_lyrics(url)
-        sanitized_title = sanitize_filename(title)
+        sanitized_title = __sanitize_text(title)
         save_lyrics_to_file(sanitized_title, lyrics, artist_name)
         print(f"Lyrics saved for {title}")
 
@@ -107,7 +121,7 @@ def main(artist_name, max_songs=100):
 
 if __name__ == "__main__":
 
-    artists = ["Jay-Z", "Drake", "Wu-Tang Clan", "The Cool Kids"]
+    artists = ["hasjkdhasd"]
 
     for artist in artists:
-        main(artist, max_songs = 100)
+        main(artist, max_songs=100)
