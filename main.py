@@ -106,14 +106,8 @@ def main(artist_name, max_songs=100):
 
 
 if __name__ == "__main__":
-    artist_name = 'Justin Bieber'
-    main(artist_name, max_songs=100)
 
-    artist_name = 'Ariana Grande'
-    main(artist_name, max_songs=100)
+    artists = ["Jay-Z", "Drake", "Wu-Tang Clan", "The Cool Kids"]
 
-    artist_name = 'The Weeknd'
-    main(artist_name, max_songs=100)
-
-    artist_name = 'Lauv'
-    main(artist_name, max_songs=100)
+    for artist in artists:
+        main(artist, max_songs = 100)
