@@ -26,7 +26,7 @@ def __sanitize_text(text):
 
 def __sanitize_lyrics(lyrics):
     # Remove any characters that are invalid in filenames
-    return re.sub(r'[\[\]<>:"/\\|?*,]', '', lyrics)
+    return re.sub(r'[\[\]<>:"/\\|?*,]', ' ', lyrics)
 
 
 def __sanitize_response(response):
