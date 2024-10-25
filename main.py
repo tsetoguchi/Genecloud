@@ -4,6 +4,8 @@ import requests
 import word_counter
 from selectolax.parser import HTMLParser
 
+from word_cloud import create_word_cloud_for_artist
+
 
 # Read the API token from api_token.txt
 def read_api_token():
@@ -102,7 +104,7 @@ def save_word_count_to_file(word_count, artist_name):
             file.write(f"{word}: {count}\n")
 
 
-def main(artist_name, max_songs=10):
+def get_artist_lyrics(artist_name, max_songs=10):
     song_titles, song_urls = search_artist_songs(artist_name, max_songs)
 
     # If there are no songs, the artist does not exist
@@ -128,15 +130,17 @@ def main(artist_name, max_songs=10):
     save_word_count_to_file(word_count_for_artist, artist_name)
 
 
-if __name__ == "__main__":
-
+def main():
     artists = ["Sabrina Carpenter", "Justin Bieber", "Future", "Gucci Mane", "Jay-Z",
                "Ariana Grande", "Bladee", "Chief Keef", "6ix9ine", "Cocteau Twins",
                "Drake", "Dua Lipa", "Eminem", "Kanye West", "Kendrick Lamar", "Lauv",
                "Lil Yachty", "Mos Def", "Nas", "Sematary", "Skrillex", "Taylor Swift",
                "The Cool Kids", "The Notorious B.I.G.", "The Weeknd", "Tupac", "Wu-Tang Clan"]
 
-    false_artists = ["hasjkdhasd"]
-
     for artist in artists:
-        main(artist, max_songs=100)
+        get_artist_lyrics(artist, max_songs=100)
+        create_word_cloud_for_artist(artist)
+
+
+if __name__ == "__main__":
+    main()

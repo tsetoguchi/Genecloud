@@ -35,6 +35,9 @@ def combine_text_files(input_dir, output_file):
 
 
 def create_word_cloud_for_artist(artist_name):
+
+    print(f"Creating word cloud for {artist_name}...")
+
     combine_text_files(f"./{artist_name}", f"./{artist_name}/combined_lyrics.txt")
 
     with open(f'./{artist_name}/combined_lyrics.txt', 'r', encoding='utf-8') as file:
