@@ -26,7 +26,10 @@ def __sanitize_text(text):
 
 def __sanitize_lyrics(lyrics):
     # Remove any characters that are invalid in filenames
-    return re.sub(r'[\[\]<>:"/\\|?*,]', ' ', lyrics)
+    lyrics = re.sub(r'[\[\]<>:"/\\|?*,1234567890]', ' ', lyrics)
+    # Remove the words "Verse" and "Chorus" (case-insensitive)
+    lyrics = re.sub(r'\b(?:Intro|Verse|Chorus|.txt|---)\b', '', lyrics, flags=re.IGNORECASE)
+    return lyrics
 
 
 def __sanitize_response(response):
