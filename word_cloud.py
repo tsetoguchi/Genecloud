@@ -47,7 +47,7 @@ def create_word_cloud_for_artist(artist_name):
 
     # Create word cloud with the mask
     wc = WordCloud(background_color='white', mask=msk, contour_width=2,
-                   contour_color='white', colormap='bone', width=1920, height=1080).generate(text)
+                   contour_color='white', colormap='copper', width=1920, height=1080).generate(text)
 
     # 'Accent', 'Accent_r', 'Blues', 'Blues_r', 'BrBG', 'BrBG_r', 'BuGn', 'BuGn_r', 'BuPu', 'BuPu_r', 'CMRmap',
     # 'CMRmap_r', 'Dark2', 'Dark2_r', 'GnBu', 'GnBu_r', 'Grays', 'Greens', 'Greens_r', 'Greys', 'Greys_r', 'OrRd',
@@ -68,11 +68,13 @@ def create_word_cloud_for_artist(artist_name):
     # 'turbo', 'turbo_r', 'twilight', 'twilight_r', 'twilight_shifted', 'twilight_shifted_r', 'viridis', 'viridis_r',
     # 'winter', 'winter_r'
 
+    plt.figure(figsize=(16, 9), dpi=120)
+
     # Display the word cloud using matplotlib
     plt.imshow(wc, interpolation='bilinear')
 
     plt.axis("off")
-    plt.savefig(f'./{artist_name}/word cloud.png', bbox_inches='tight')
+    plt.savefig(f'./{artist_name}/word cloud.png')
     # plt.show()
 
 

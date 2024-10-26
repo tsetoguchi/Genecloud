@@ -29,9 +29,13 @@ def __sanitize_text(text):
 def __sanitize_lyrics(lyrics):
     # Remove any characters that are invalid in filenames
     lyrics = re.sub(r'[\[\]<>:"/\\|?*,1234567890]', ' ', lyrics)
-    # Remove the words "Verse" and "Chorus" (case-insensitive)
+    # Remove the words "Intro", "Verse", "Chorus", ".txt", and "---" (case-insensitive)
     lyrics = re.sub(r'\b(?:Intro|Verse|Chorus|.txt|---)\b', '', lyrics, flags=re.IGNORECASE)
-    return lyrics
+    # Replace newlines and multiple spaces with a single space
+    lyrics = re.sub(r'\s+', ' ', lyrics).strip()
+    # Add a space before each uppercase letter that follows a lowercase letter
+    lyrics = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', lyrics)
+    return lyrics.upper()
 
 
 def __sanitize_response(response):
@@ -131,11 +135,15 @@ def get_artist_lyrics(artist_name, max_songs=10):
 
 
 def main():
-    artists = ["Sabrina Carpenter", "Justin Bieber", "Future", "Gucci Mane", "Jay-Z",
-               "Ariana Grande", "Bladee", "Chief Keef", "6ix9ine", "Cocteau Twins",
-               "Drake", "Dua Lipa", "Eminem", "Kanye West", "Kendrick Lamar", "Lauv",
-               "Lil Yachty", "Mos Def", "Nas", "Sematary", "Skrillex", "Taylor Swift",
-               "The Cool Kids", "The Notorious B.I.G.", "The Weeknd", "Tupac", "Wu-Tang Clan"]
+    # artists = ["Sabrina Carpenter", "Justin Bieber", "Future", "Gucci Mane", "Jay-Z",
+    #            "Ariana Grande", "Bladee", "Chief Keef", "6ix9ine", "Cocteau Twins",
+    #            "Drake", "Dua Lipa", "Eminem", "Kanye West", "Kendrick Lamar", "Lauv",
+    #            "Lil Yachty", "Mos Def", "Nas", "Sematary", "Skrillex", "Taylor Swift",
+    #            "The Cool Kids", "The Notorious B.I.G.", "The Weeknd", "Tupac", "Wu-Tang Clan"]
+
+    artists = ["ye"]
+
+    # artists = ["Michael Jackson"]
 
     for artist in artists:
         get_artist_lyrics(artist, max_songs=100)
